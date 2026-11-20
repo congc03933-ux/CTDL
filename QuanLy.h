@@ -41,5 +41,9 @@ string layChuDau(const string& ten);
 int xacDinhNhom(const string& hoTen);	
 bool themThiSinh(BangBam& bang, const ThiSinh& ts);
 bool kiemTraNgaySinh(const std::string& ngaySinh);
+bool docFileThiSinh(BangBam& bang, const string& tenFile);
+bool luuFileThiSinh(const BangBam& bang, const string& tenFile);
+bool xuatDanhSachPhong(const DanhSach dsPhong[], int soPhong, const string& tenFile);
+
 
 #endif

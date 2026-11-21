@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include "QuanLy.h"
+#include "ChiaPhong.h"
 using namespace std;
 
 void khoiTaoKetQua(KetQuaChiaPhong& kq)
@@ -29,9 +30,11 @@ void giaiPhongKetQua(KetQuaChiaPhong& kq)
 void themVaoPhong(Phong& ph, const ThiSinh* ts, int nhom)
 {
     PhongNode* moi = new PhongNode;
+
     moi->ts = ts;
     moi->nhom = nhom;
     moi->next = NULL;
+
     if (ph.head == NULL)
     {
         ph.head = moi;
@@ -42,6 +45,7 @@ void themVaoPhong(Phong& ph, const ThiSinh* ts, int nhom)
         ph.tail->next = moi;
         ph.tail = moi;
     }
+
     ph.size++;
 }
 
@@ -59,7 +63,7 @@ int demCapTrung(const KetQuaChiaPhong& kq)
     return tong;
 }
 
-bool chiaPhong(const BangTra& bang, int soPhong, KetQuaChiaPhong& kq)
+bool chiaPhong(const BangBam& bang, int soPhong, KetQuaChiaPhong& kq)
 {
     giaiPhongKetQua(kq);
 
@@ -68,12 +72,14 @@ bool chiaPhong(const BangTra& bang, int soPhong, KetQuaChiaPhong& kq)
 
     int tong = 0;
     for (int g = 0; g < SO_NHOM; g++)
-        tong += bang.nhom[g].size;
+        tong += bang.bucket[g].soLuong;
+
     if (tong == 0)
         return false;
 
     kq.soPhong = soPhong;
     kq.phong = new Phong[soPhong];
+
     for (int i = 0; i < soPhong; i++)
     {
         kq.phong[i].head = NULL;
@@ -82,11 +88,13 @@ bool chiaPhong(const BangTra& bang, int soPhong, KetQuaChiaPhong& kq)
     }
 
     int luot = 0;
+
     for (int g = 0; g < SO_NHOM; g++)
     {
-        for (Node* p = bang.nhom[g].head; p != NULL; p = p->next)
+        for (Node* p = bang.bucket[g].head; p != NULL; p = p->next)
         {
             themVaoPhong(kq.phong[luot], &p->data, g);
+
             luot++;
             if (luot == soPhong)
                 luot = 0;
@@ -142,20 +150,23 @@ int nhapSoPhong()
     }
 }
 
-void thucHienChiaPhong(const BangTra& bang, KetQuaChiaPhong& kq)
+void thucHienChiaPhong(const BangBam& bang, KetQuaChiaPhong& kq)
 {
     int tong = 0;
+
     for (int g = 0; g < SO_NHOM; g++)
-        tong += bang.nhom[g].size;
+        tong += bang.bucket[g].soLuong;
+
     if (tong == 0)
     {
-        cout << "ChÆ°a cĂ³ thĂ­ sinh nĂ o Ä‘á»ƒ chia phĂ²ng.\n";
+        cout << "Chua co thi sinh de chia phong.\n";
         return;
     }
 
     int soPhong = nhapSoPhong();
+
     if (soPhong > tong)
-        cout << "LÆ°u Ă½: sá»‘ phĂ²ng lá»›n hÆ¡n sá»‘ thĂ­ sinh, sáº½ cĂ³ phĂ²ng rá»—ng.\n";
+        cout << "Luu y: so phong lon hon so thi sinh, se co phong rong.\n";
 
     chiaPhong(bang, soPhong, kq);
     xuatDanhSachPhong(cout, kq);

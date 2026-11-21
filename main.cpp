@@ -1,52 +1,65 @@
 #include <iostream>
-#include <windows.h>
-#include "QuanLy.h"
+#include <limits>
+#include "quanli.h"
+
 using namespace std;
-//Ðay la test xoa neu can 
+
+void hienThiMenu() {
+    cout << "\n================ QUAN LY THI SINH ================\n";
+    cout << "1. Them ho so thi sinh\n";
+    cout << "2. Tim kiem thi sinh\n";
+    cout << "3. Sap xep danh sach tang dan\n";
+    cout << "4. Chia phong thi\n";
+    cout << "5. Doc ho so tu file TXT\n";
+    cout << "6. Luu ho so ra file TXT va xuat danh sach phong\n";
+    cout << "0. Thoat chuong trinh\n";
+    cout << "==================================================\n";
+    cout << "Nhap lua chon: ";
+}
+
 int main() {
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
+    BangQuanLy ds;
+    khoiTaoBang(ds);
 
-    BangBam bang;
-    khoiTaoBangBam(bang);
+    int luaChon = -1;
+    do {
+        hienThiMenu();
+        if (!(cin >> luaChon)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Lua chon khong hop le! Vui long nhap so.\n";
+            continue;
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    ThiSinh ts;
+        switch (luaChon) {
+            case 1:
+                themThiSinh(ds);
+                break;
+            case 2:
+                timKiemThiSinh(ds);
+                break;
+            case 3:
+                sapXepDanhSach(ds);
+                break;
+            case 4:
+                chiaPhongThi(ds);
+                break;
+            case 5:
+                docFileTXT(ds);
+                break;
+            case 6:
+                luuFileVaXuatPhong(ds);
+                break;
+            case 0:
+                giaiPhongBoNho(ds);
+                cout << "Da thoat chuong trinh.\n";
+                break;
+            default:
+                cout << "Chuc nang khong ton tai! Vui long chon tu 0 den 6.\n";
+                break;
+        }
+    } while (luaChon != 0);
 
-    cout << "Nhap ho ten: ";
-    getline(cin, ts.hoTen);
-
-    cout << "Nhap ma du thi: ";
-    getline(cin, ts.maDuThi);
-
-    cout << "Nhap gioi tinh: ";
-    getline(cin, ts.gioiTinh);
-
-    cout << "Nhap ngay sinh: ";
-    getline(cin, ts.ngaySinh);
-
-    cout << "Nhap que quan: ";
-    getline(cin, ts.queQuan);
-
-    if (themThiSinh(bang, ts)) {
-        cout << "Them thanh cong.\n";
-        cout << "Chi so nhom: "
-             << xacDinhNhom(ts.hoTen) << '\n';
-    } else {
-        cout << "Khong them duoc: thong tin khong hop le hoac trung ma.\n";
-    }
-
-    cout << "Tong so thi sinh: " << demThiSinh(bang) << '\n';
-
-    cout << "Thu them lai cung ho so:\n";
-
-    if (themThiSinh(bang, ts)) {
-        cout << "Them thanh cong.\n";
-    } else {
-        cout << "Khong them duoc: thong tin khong hop le hoac trung ma.\n";
-    }
-
-    cout << "Tong so thi sinh: " << demThiSinh(bang) << '\n';
-
-    giaiPhongBangBam(bang);
     return 0;
 }
